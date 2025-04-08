@@ -41,6 +41,32 @@ app.get("/crimes/locations", async(req, res) => {
     }
 });
 
+app.get("/crimes/search", async (req, res) => {
+    const city = req.query.city;
+    if (!city?.trim()) {
+        return res.status(400).json({ message: "City parameter is required" });
+    }
+    try {
+        const response = await axios.get(`https://brottsplatskartan.se/api/events/?location=${city}&limit=5`);
+        console.log(response.data.data);
+        
+        res.json(response.data.data);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error searching crimes for the specified city" });
+    }
+});
+
+app.get("/crimes/latest", async(req, res) => {
+    try {
+        const response = await axios.get("https://brottsplatskartan.se/api/events/?location=helsingborg&limit=5");
+        const latestCrime = response.data.data[0];
+        res.json(latestCrime);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error fetching latest crime" });
+    }
+});
 
 app.listen(PORT, () => {
     console.log(`Server running on PORT ${PORT}`);

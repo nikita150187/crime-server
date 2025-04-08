@@ -34,4 +34,33 @@ paths:
                 items:
                   type: string
 
-  
+  /crimes/search:
+    get:
+      summary: Search for crimes in a specific city
+      parameters:
+        - in: query
+          name: city
+          schema:
+            type: string
+          required: true
+          description: The city to search for crimes
+      responses:
+        200:
+          description: A list of crimes for the specified city
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+
+  /crimes/latest:
+    get:
+      summary: Get the latest crime event
+      responses:
+        200:
+          description: The most recent crime event
+          content:
+            application/json:
+              schema:
+                type: object
